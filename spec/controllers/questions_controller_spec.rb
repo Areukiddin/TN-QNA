@@ -9,6 +9,9 @@ RSpec.describe QuestionsController, type: :controller do
     it 'renders index view' do
       expect(response).to render_template :index
     end
+    it 'show questions list' do
+      expect(assigns(:questions)).to match_array(questions)
+    end
   end
 
   describe 'GET #show' do
@@ -16,6 +19,9 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'renders show view' do
       expect(response).to render_template :show
+    end
+    it 'show needed question' do
+      expect(assigns(:question)).to eq(Question.find(question.id))
     end
   end
 
@@ -38,6 +44,7 @@ RSpec.describe QuestionsController, type: :controller do
         expect(response).to redirect_to assigns(:question)
       end
     end
+
     context 'with invalid params' do
       let(:invalid_response) { post :create, params: { question: attributes_for(:question, :invalid) } }
 

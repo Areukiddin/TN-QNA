@@ -8,6 +8,9 @@ RSpec.describe AnswersController, type: :controller do
     it 'renders show view' do
       expect(response).to render_template :show
     end
+    it 'show needed answer' do
+      expect(assigns(:answer)).to eq(Answer.find(answer.id))
+    end
   end
 
   describe 'GET #new' do
@@ -16,11 +19,14 @@ RSpec.describe AnswersController, type: :controller do
     it 'renders new view' do
       expect(response).to render_template :new
     end
+    it 'new instance of answer' do
+      expect(assigns(:answer)).to be_a_new(Answer)
+    end
   end
 
   describe 'POST #create' do
     context 'with valid params' do
-      let(:valid_response) { post :create, params: { question_id: question, answer: attributes_for(:answer) } }
+      let(:valid_response) { post :create, params: { question_id: question.id, answer: attributes_for(:answer) } }
 
       it 'saves a new answer to database' do
         expect { valid_response }.to change(question.answers, :count).by(1)
@@ -30,8 +36,9 @@ RSpec.describe AnswersController, type: :controller do
         expect(response).to redirect_to question_answers_path(assigns(:question))
       end
     end
+
     context 'with invalid params' do
-      let(:invalid_response) { post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid) } }
+      let(:invalid_response) { post :create, params: { question_id: question.id, answer: attributes_for(:answer, :invalid) } }
 
       it "doesn't save the answer to database" do
         expect { invalid_response }.to_not change(question.answers, :count)
