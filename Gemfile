@@ -23,6 +23,7 @@ gem 'jbuilder', '~> 2.7'
 # gem 'bcrypt', '~> 3.1.7'
 # Rubocop rails
 gem 'rubocop-rails', require: false
+gem 'rubocop-rspec', require: false
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'

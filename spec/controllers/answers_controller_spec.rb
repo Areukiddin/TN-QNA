@@ -3,18 +3,18 @@ RSpec.describe AnswersController, type: :controller do
   let!(:answer) { create(:answer) }
 
   describe 'GET #show' do
-    before { get :show, params: { id: answer} }
+    before { get :show, params: { id: answer.id } }
 
     it 'renders show view' do
       expect(response).to render_template :show
     end
     it 'show needed answer' do
-      expect(assigns(:answer)).to eq(Answer.find(answer.id))
+      expect(assigns(:answer)).to eq answer
     end
   end
 
   describe 'GET #new' do
-    before { get :new, params: { question_id: question} }
+    before { get :new, params: { question_id: question.id } }
 
     it 'renders new view' do
       expect(response).to render_template :new
