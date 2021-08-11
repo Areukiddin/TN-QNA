@@ -1,6 +1,7 @@
 RSpec.describe AnswersController, type: :controller do
   let!(:question) { create(:question) }
   let!(:answer) { create(:answer) }
+  let(:user) { create(:user) }
 
   describe 'GET #show' do
     before { get :show, params: { id: answer.id } }
@@ -14,6 +15,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'GET #new' do
+    before { login(user) }
+
     before { get :new, params: { question_id: question.id } }
 
     it 'renders new view' do
@@ -25,6 +28,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'POST #create' do
+    before { login(user) }
+
     context 'with valid params' do
       let(:valid_response) { post :create, params: { question_id: question.id, answer: attributes_for(:answer) } }
 

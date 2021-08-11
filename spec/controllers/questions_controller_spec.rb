@@ -1,5 +1,6 @@
 RSpec.describe QuestionsController, type: :controller do
   let(:question) { create(:question) }
+  let(:user) { create(:user) }
 
   describe 'GET /#index' do
     let(:questions) { create_list(:question, 5) }
@@ -26,6 +27,8 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #new' do
+    before { login(user) }
+
     before { get :new }
 
     it 'renders new view' do
@@ -34,6 +37,8 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #create' do
+    before { login(user) }
+
     context 'with valid params' do
       let(:valid_response) { post :create, params: { question: attributes_for(:question) } }
 
