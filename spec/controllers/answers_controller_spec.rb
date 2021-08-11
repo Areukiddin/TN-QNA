@@ -38,7 +38,7 @@ RSpec.describe AnswersController, type: :controller do
       end
       it 'redirects to the current answer question' do
         valid_response
-        expect(response).to redirect_to question_answers_path(assigns(:question))
+        expect(response).to redirect_to question_path(assigns(:question))
       end
     end
 
