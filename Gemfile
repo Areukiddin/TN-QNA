@@ -25,6 +25,8 @@ gem 'jbuilder', '~> 2.7'
 gem 'rubocop-rails', require: false
 gem 'rubocop-rspec', require: false
 
+gem 'devise'
+
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
@@ -52,6 +54,7 @@ end
 group :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 3.26'
+  gem 'launchy'
   gem 'rails-controller-testing'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers', '~> 5.0'
