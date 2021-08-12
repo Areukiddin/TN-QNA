@@ -54,4 +54,17 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  describe 'POST #destroy' do
+    let(:author) { create(:user) }
+    let(:answer) { create(:answer, author: author) }
+    let(:answer_destroy) { delete :destroy, params: { id: answer } }
+
+    before { login(author) }
+
+    it 'deletes the answer from database' do
+
+      expect { answer_destroy }.to change(author.answers, :count).by(-1)
+    end
+  end
 end

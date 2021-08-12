@@ -7,7 +7,7 @@ feature 'User can create answer', %q{
   given(:user) { create(:user) }
   given!(:questions) { create_list(:uniq_question, 3) }
 
-  describe 'Authenticated user' do
+  context 'Authenticated user' do
     background do
       sign_in(user)
 
