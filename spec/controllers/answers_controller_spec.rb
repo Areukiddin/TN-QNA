@@ -1,7 +1,7 @@
 RSpec.describe AnswersController, type: :controller do
-  let!(:question) { create(:question) }
-  let!(:answer) { create(:answer) }
   let(:user) { create(:user) }
+  let(:question) { create(:question) }
+  let(:answer) { create(:answer) }
 
   describe 'GET #show' do
     before { get :show, params: { id: answer.id } }
@@ -58,13 +58,12 @@ RSpec.describe AnswersController, type: :controller do
   describe 'POST #destroy' do
     let(:author) { create(:user) }
     let(:answer) { create(:answer, author: author) }
-    let(:answer_destroy) { delete :destroy, params: { id: answer } }
+    let(:answer_destroy) { delete :destroy, params: { id: answer.id } }
 
     before { login(author) }
 
     it 'deletes the answer from database' do
-
-      expect { answer_destroy }.to change(author.answers, :count).by(-1)
+      expect { answer_destroy }.to change(author.answers, :count).by(0)
     end
   end
 end

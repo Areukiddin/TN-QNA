@@ -14,7 +14,7 @@ class AnswersController < ApplicationController
     @answer.author = current_user
 
     if @answer.save
-      redirect_to question_path(@answer.question)
+      redirect_to question_path(@answer.question), notice: t('user_actions.successfully_created', resource: @answer.class)
     else
       render :new
     end
@@ -23,9 +23,9 @@ class AnswersController < ApplicationController
   def destroy
     if @answer.author.eql?(current_user)
       @answer.destroy
-      flash[:notice] = "Answer was successfully deleted."
+      flash[:notice] = t('user_actions.successfully_deleted', resource: @answer.class)
     else
-      flash[:notice] = "You can't delete this answer, because you are not an author."
+      flash[:notice] = t('user_actions.delete_rejected', resource: @answer.class.to_s.downcase)
     end
 
     redirect_to question_path(@answer.question)

@@ -8,7 +8,7 @@ feature 'User can see questions list', %q{
   scenario 'User can see questions list' do
     visit root_path
 
-    expect(page.find_all('li').count).to eq 3
+    expect(page.find_all('li.question').count).to eq 3
 
     questions.each do |question|
       expect(page).to have_content question.title

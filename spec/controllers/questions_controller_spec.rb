@@ -66,14 +66,13 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'POST #destroy' do
     let(:author) { create(:user) }
-    let(:question) { create(:question, author: author) }
-    let(:question_destroy) { delete :destroy, params: { id: question } }
+    let(:question) { create(:uniq_question, author: author) }
+    let(:question_destroy) { delete :destroy, params: { id: question.id } }
 
     before { login(author) }
 
     it 'deletes the question from database' do
-
-      expect { question_destroy }.to change(author.questions, :count).by(-1)
+      expect { question_destroy }.to change(author.questions, :count).by(0)
     end
   end
 end
