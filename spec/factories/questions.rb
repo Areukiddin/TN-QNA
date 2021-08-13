@@ -9,7 +9,7 @@ FactoryBot.define do
 
   factory :question do
     title { 'MyString' }
-    body { 'MyText' }
+    body { 'MyQuestion' }
     association :author, factory: :user
 
     factory :uniq_question do

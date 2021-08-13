@@ -29,9 +29,10 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #new' do
-    before { login(user) }
-
-    before { get :new }
+    before do
+      login(user)
+      get :new
+    end
 
     it 'renders new view' do
       expect(response).to render_template :new
@@ -58,7 +59,7 @@ RSpec.describe QuestionsController, type: :controller do
       let(:invalid_response) { post :create, params: { question: attributes_for(:question, :invalid) } }
 
       it "doesn't save the question to database" do
-        expect { invalid_response }.to_not change(Question, :count)
+        expect { invalid_response }.not_to change(Question, :count)
       end
 
       it 're-render new view' do

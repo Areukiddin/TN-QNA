@@ -11,22 +11,28 @@ feature 'Author can destroy own questions', %(
 
     scenario 'own question' do
       visit question_path(question_own)
+
+      expect(page).to have_content question_own.body
+
       click_on 'Delete'
 
       expect(page).to have_content 'Question was successfully deleted.'
-      expect(page.find_all('li.question').count).to eq 1
+      expect(page).not_to have_content question_own.body
     end
 
     scenario 'another question' do
       visit question_path(question_foreign)
+
+      expect(page).to have_content question_foreign.title
+
       click_on 'Delete'
 
       expect(page).to have_content "You can't delete this question, because you are not an author."
-      expect(page.find_all('li.question').count).to eq 2
+      expect(page).to have_content question_foreign.title
     end
   end
 
   scenario 'Unuthenticated user can not delete question' do
-    expect(page).to_not have_link 'Delete'
+    expect(page).not_to have_link 'Delete'
   end
 end

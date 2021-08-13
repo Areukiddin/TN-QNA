@@ -1,13 +1,9 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: %i[show]
-  before_action :find_question, only: %i[new create]
+  before_action :find_question, only: %i[create]
   before_action :find_answer, only: %i[show destroy]
 
   def show; end
-
-  def new
-    @answer = @question.answers.new
-  end
 
   def create
     @answer = @question.answers.build(answer_params.merge(author: current_user))
@@ -15,12 +11,12 @@ class AnswersController < ApplicationController
     if @answer.save
       redirect_to question_path(@answer.question), notice: t('user_actions.successfully_created', resource: @answer.class)
     else
-      render :new
+      redirect_to question_path(@answer.question), notice: @answer.errors.full_messages.to_sentence
     end
   end
 
   def destroy
-    if @answer.author.eql?(current_user)
+    if current_user.author_of?(@answer)
       @answer.destroy
       flash[:notice] = t('user_actions.successfully_deleted', resource: @answer.class)
     else

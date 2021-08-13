@@ -17,12 +17,17 @@ feature 'User can create answer', %(
       fill_in 'Body', with: 'Question answer'
       click_on 'Answer'
 
-      expect(page.find_all('p.answer').count).to eq 1
-
       expect(page).to have_content questions.first.title
       expect(page).to have_content questions.first.body
       expect(page).to have_content 'Answers:'
       expect(page).to have_content 'Question answer'
+    end
+
+    scenario 'try to post empty answer' do
+      click_on 'Answer'
+
+      expect(page.find_all('p.answer').count).to eq 0
+      expect(page).to have_content "Body can't be blank"
     end
   end
 

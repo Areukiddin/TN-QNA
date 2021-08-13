@@ -9,33 +9,22 @@ RSpec.describe AnswersController, type: :controller do
     it 'renders show view' do
       expect(response).to render_template :show
     end
+
     it 'show needed answer' do
       expect(assigns(:answer)).to eq answer
     end
   end
 
-  describe 'GET #new' do
-    before { login(user) }
-
-    before { get :new, params: { question_id: question.id } }
-
-    it 'renders new view' do
-      expect(response).to render_template :new
-    end
-    it 'new instance of answer' do
-      expect(assigns(:answer)).to be_a_new(Answer)
-    end
-  end
-
   describe 'POST #create' do
-    before { login(user) }
+    let(:valid_response) { post :create, params: { question_id: question.id, answer: attributes_for(:answer) } }
 
     context 'with valid params' do
-      let(:valid_response) { post :create, params: { question_id: question.id, answer: attributes_for(:answer) } }
+      before { login(user) }
 
       it 'saves a new answer to database' do
         expect { valid_response }.to change(question.answers, :count).by(1)
       end
+
       it 'redirects to the current answer question' do
         valid_response
         expect(response).to redirect_to question_path(assigns(:question))
@@ -43,14 +32,23 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'with invalid params' do
+      before { login(user) }
+
       let(:invalid_response) { post :create, params: { question_id: question.id, answer: attributes_for(:answer, :invalid) } }
 
       it "doesn't save the answer to database" do
-        expect { invalid_response }.to_not change(question.answers, :count)
+        expect { invalid_response }.not_to change(question.answers, :count)
       end
-      it 're-render new view' do
+
+      it 'redirect to current question' do
         invalid_response
-        expect(response).to render_template :new
+        expect(response).to redirect_to question_path(question)
+      end
+    end
+
+    context 'when unauthorized user try to create a new answer' do
+      it 'does not save the answer to database' do
+        expect { valid_response }.not_to change(question.answers, :count)
       end
     end
   end
