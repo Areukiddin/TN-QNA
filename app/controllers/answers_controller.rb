@@ -10,8 +10,7 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @answer = @question.answers.build(answer_params)
-    @answer.author = current_user
+    @answer = @question.answers.build(answer_params.merge(author: current_user))
 
     if @answer.save
       redirect_to question_path(@answer.question), notice: t('user_actions.successfully_created', resource: @answer.class)

@@ -1,9 +1,8 @@
-feature 'User can create question', %q{
+feature 'User can create question', %(
   In order to get answer from a community
   As an authenticated user
   I'd like to be able to ask the question
-} do
-
+) do
   given(:user) { create(:user) }
 
   context 'Authenticated user' do

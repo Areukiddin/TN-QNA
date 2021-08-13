@@ -1,9 +1,8 @@
-feature 'Author can destroy own answers', %q{
+feature 'Author can destroy own answers', %(
   In order to control own activity
   As an authenticated user
   I'd like to be able to destroy own answers
-} do
-
+) do
   given(:answer_own) { create(:answer) }
   given(:answer_foreign) { create(:answer) }
 
@@ -15,7 +14,7 @@ feature 'Author can destroy own answers', %q{
 
       click_on 'Delete answer'
 
-      expect(page).to have_content "Answer was successfully deleted."
+      expect(page).to have_content 'Answer was successfully deleted.'
       expect(page.find_all('p.answer').count).to eq 0
     end
 
@@ -29,9 +28,9 @@ feature 'Author can destroy own answers', %q{
     end
   end
 
-    scenario 'Unuthenticated user can not delete answer' do
-      visit question_path(answer_foreign.question)
+  scenario 'Unuthenticated user can not delete answer' do
+    visit question_path(answer_foreign.question)
 
-      expect(page).to_not have_link 'Delete answer'
-    end
+    expect(page).to_not have_link 'Delete answer'
+  end
 end

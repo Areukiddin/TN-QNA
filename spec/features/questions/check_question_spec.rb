@@ -1,8 +1,7 @@
-feature 'User can see questions list', %q{
+feature 'User can see questions list', %(
   In order to find needed answer
   I'd like to be able to see questions list
-} do
-
+) do
   given!(:questions) { create_list(:uniq_question, 3) }
 
   scenario 'User can see questions list' do

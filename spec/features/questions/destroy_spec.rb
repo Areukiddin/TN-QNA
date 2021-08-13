@@ -1,9 +1,8 @@
-feature 'Author can destroy own questions', %q{
+feature 'Author can destroy own questions', %(
   In order to control own activity
   As an authenticated user
   I'd like to be able to destroy own questions
-} do
-
+) do
   given!(:question_own) { create(:question) }
   given!(:question_foreign) { create(:question) }
 
@@ -14,7 +13,7 @@ feature 'Author can destroy own questions', %q{
       visit question_path(question_own)
       click_on 'Delete'
 
-      expect(page).to have_content "Question was successfully deleted."
+      expect(page).to have_content 'Question was successfully deleted.'
       expect(page.find_all('li.question').count).to eq 1
     end
 
@@ -27,8 +26,7 @@ feature 'Author can destroy own questions', %q{
     end
   end
 
-    scenario 'Unuthenticated user can not delete question' do
-
-      expect(page).to_not have_link 'Delete'
-    end
+  scenario 'Unuthenticated user can not delete question' do
+    expect(page).to_not have_link 'Delete'
+  end
 end

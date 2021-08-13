@@ -8,8 +8,8 @@ FactoryBot.define do
   end
 
   factory :question do
-    title { "MyString" }
-    body { "MyText" }
+    title { 'MyString' }
+    body { 'MyText' }
     association :author, factory: :user
 
     factory :uniq_question do

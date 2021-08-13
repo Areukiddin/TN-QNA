@@ -10,6 +10,7 @@ RSpec.describe QuestionsController, type: :controller do
     it 'renders index view' do
       expect(response).to render_template :index
     end
+
     it 'show questions list' do
       expect(assigns(:questions)).to match_array(questions)
     end
@@ -21,6 +22,7 @@ RSpec.describe QuestionsController, type: :controller do
     it 'renders show view' do
       expect(response).to render_template :show
     end
+
     it 'show needed question' do
       expect(assigns(:question)).to eq question
     end
@@ -45,6 +47,7 @@ RSpec.describe QuestionsController, type: :controller do
       it 'saves a new question to database' do
         expect { valid_response }.to change(Question, :count).by(1)
       end
+
       it 'redirects to the question' do
         valid_response
         expect(response).to redirect_to assigns(:question)
@@ -57,6 +60,7 @@ RSpec.describe QuestionsController, type: :controller do
       it "doesn't save the question to database" do
         expect { invalid_response }.to_not change(Question, :count)
       end
+
       it 're-render new view' do
         invalid_response
         expect(response).to render_template :new
