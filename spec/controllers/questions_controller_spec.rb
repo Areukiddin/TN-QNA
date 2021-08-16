@@ -1,6 +1,7 @@
 RSpec.describe QuestionsController, type: :controller do
   let(:question) { create(:question) }
   let(:user) { create(:user) }
+  let(:author) { create(:user) }
 
   describe 'GET /#index' do
     let(:questions) { create_list(:question, 5) }
@@ -70,14 +71,35 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #destroy' do
-    let(:author) { create(:user) }
-    let(:question) { create(:uniq_question, author: author) }
+    let!(:question) { create(:question, author: author) }
     let(:question_destroy) { delete :destroy, params: { id: question.id } }
 
     before { login(author) }
 
-    it 'deletes the question from database' do
-      expect { question_destroy }.to change(author.questions, :count).by(0)
+    context 'when author tries to destroy own question' do
+      it 'deletes the question from database' do
+        expect { question_destroy }.to change(author.questions, :count).by(-1)
+      end
+
+      it 'redirects to the questions_path' do
+        question_destroy
+
+        expect(response).to redirect_to questions_path
+      end
+    end
+
+    context 'when another user tries to destroy the question' do
+      before { login(user) }
+
+      it 'not deletes the question from database' do
+        expect { question_destroy }.not_to change(author.questions, :count)
+      end
+
+      it 'redirects to the questions_path' do
+        question_destroy
+
+        expect(response).to redirect_to questions_path
+      end
     end
   end
 end

@@ -2,7 +2,7 @@ feature 'User can register', %(
   In order to get all permissions
   I'd like to be able to register
 ) do
-  context 'User tries to register' do
+  context 'when user tries to register' do
     background { visit new_user_registration_path }
 
     scenario 'with valid params' do
