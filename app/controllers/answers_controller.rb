@@ -1,21 +1,29 @@
 class AnswersController < ApplicationController
-  before_action :find_question, only: %i[new create]
-  before_action :find_answer, only: :show
+  before_action :authenticate_user!, except: %i[show]
+  before_action :find_question, only: %i[create]
+  before_action :find_answer, only: %i[show destroy]
 
   def show; end
 
-  def new
-    @answer = @question.answers.new
-  end
-
   def create
-    @answer = @question.answers.build(answer_params)
+    @answer = @question.answers.build(answer_params.merge(author: current_user))
 
     if @answer.save
-      redirect_to question_answers_path(@answer.question)
+      redirect_to question_path(@answer.question), notice: t('user_actions.successfully_created', resource: @answer.class)
     else
-      render :new
+      redirect_to question_path(@answer.question), notice: @answer.errors.full_messages.to_sentence
     end
+  end
+
+  def destroy
+    if current_user.author_of?(@answer)
+      @answer.destroy
+      flash[:notice] = t('user_actions.successfully_deleted', resource: @answer.class)
+    else
+      flash[:notice] = t('user_actions.delete_rejected', resource: @answer.class.to_s.downcase)
+    end
+
+    redirect_to question_path(@answer.question)
   end
 
   private
@@ -29,6 +37,6 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:body, :correct)
+    params.require(:answer).permit(:body)
   end
 end

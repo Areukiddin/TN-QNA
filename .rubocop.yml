@@ -40,3 +40,10 @@ Metrics/BlockLength:
 
 Rails/ContentTag:
   Enabled: false
+
+RSpec/Capybara/FeatureMethods:
+  Exclude:
+    - spec/features/**/*.rb
+
+RSpec/MultipleMemoizedHelpers:
+  Max: 7
