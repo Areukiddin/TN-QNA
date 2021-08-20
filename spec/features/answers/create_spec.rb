@@ -6,7 +6,7 @@ feature 'User can create answer', %(
   given(:user) { create(:user) }
   given!(:questions) { create_list(:uniq_question, 3) }
 
-  context 'Authenticated user' do
+  context 'when authenticated user', js: true do
     background do
       sign_in(user)
 
@@ -19,7 +19,6 @@ feature 'User can create answer', %(
 
       expect(page).to have_content questions.first.title
       expect(page).to have_content questions.first.body
-      expect(page).to have_content 'Answers:'
       expect(page).to have_content 'Question answer'
     end
 

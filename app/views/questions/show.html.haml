@@ -1,13 +1,16 @@
 %h2= @question.title
 %h3= @question.body
-- if user_signed_in?
+- if user_signed_in? && current_user.author_of?(@question)
   %p.delete= link_to 'Delete', question_path(@question), method: :delete, data: { confirm: 'Are you sure to delete question?' }
 
 %h4= "Answers:"
+.answers
+  = render @question.answers
 
-= render @question.answers
+.answer-errors
+  = render 'shared/errors', resource: @answer
 
-= form_with model: [@question, @question.answers.new], local: true do |f|
+= form_with model: [@question, @answer], local: false do |f|
   = f.label :body
   = f.text_field :body
 

@@ -17,7 +17,7 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'POST #create' do
-    let(:valid_response) { post :create, params: { question_id: question.id, answer: attributes_for(:answer) } }
+    let(:valid_response) { post :create, params: { question_id: question.id, answer: attributes_for(:answer), format: :js } }
 
     context 'with valid params' do
       before { login(user) }
@@ -28,14 +28,14 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'redirects to the current answer question' do
         valid_response
-        expect(response).to redirect_to question_path(assigns(:question))
+        expect(response).to render_template :create
       end
     end
 
     context 'with invalid params' do
       before { login(user) }
 
-      let(:invalid_response) { post :create, params: { question_id: question.id, answer: attributes_for(:answer, :invalid) } }
+      let(:invalid_response) { post :create, params: { question_id: question.id, answer: attributes_for(:answer, :invalid), format: :js } }
 
       it "doesn't save the answer to database" do
         expect { invalid_response }.not_to change(question.answers, :count)
@@ -43,7 +43,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'redirect to current question' do
         invalid_response
-        expect(response).to redirect_to question_path(question)
+        expect(response).to render_template :create
       end
     end
 
