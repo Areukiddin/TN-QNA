@@ -2,5 +2,5 @@ $('.answer-errors').html('<%= escape_javascript(render 'shared/errors', resource
 
 <% if @answer.persisted? %>
   $('.answers').append('<%= escape_javascript(render @answer) %>')
-  $('#answer_body').val('');
+  $('.new-answer #answer_body').val('');
 <% end %>

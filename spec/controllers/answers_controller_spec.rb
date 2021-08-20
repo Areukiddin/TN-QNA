@@ -2,9 +2,10 @@ RSpec.describe AnswersController, type: :controller do
   let(:user) { create(:user) }
   let(:author) { create(:user) }
   let(:question) { create(:question) }
-  let(:answer) { create(:answer) }
 
   describe 'GET #show' do
+    let(:answer) { create(:answer) }
+
     before { get :show, params: { id: answer.id } }
 
     it 'renders show view' do
@@ -26,7 +27,7 @@ RSpec.describe AnswersController, type: :controller do
         expect { valid_response }.to change(question.answers, :count).by(1)
       end
 
-      it 'redirects to the current answer question' do
+      it 'renders create template' do
         valid_response
         expect(response).to render_template :create
       end
@@ -41,7 +42,7 @@ RSpec.describe AnswersController, type: :controller do
         expect { invalid_response }.not_to change(question.answers, :count)
       end
 
-      it 'redirect to current question' do
+      it 'renders create template' do
         invalid_response
         expect(response).to render_template :create
       end
@@ -54,9 +55,58 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
+  describe 'PATCH #update' do
+    let!(:answer) { create(:answer, question: question) }
+    let(:valid_response) { patch :update, params: { id: answer, answer: { body: 'updated body' } }, format: :js }
+    let(:invalid_response) { patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js }
+
+    context 'when author tries to edit own answer' do
+      before { login author }
+
+      context 'with valid params' do
+        before { valid_response }
+
+        it 'changes answer attributes' do
+          answer.reload
+
+          expect(answer.body).to eq 'updated body'
+        end
+
+        it 'renders update view' do
+          expect(response).to render_template :update
+        end
+      end
+
+      context 'with invalid params' do
+        it 'does not update the answer in database' do
+          expect { invalid_response }.not_to change(answer, :body)
+        end
+
+        it 'renders update view' do
+          invalid_response
+          expect(response).to render_template :update
+        end
+      end
+    end
+
+    context 'when another user tries to edit the answer' do
+      before { login(user) }
+
+      it 'does not update the answer in database' do
+        expect { valid_response }.not_to change(answer, :body)
+      end
+    end
+
+    context 'when unauthorized user try to update answer' do
+      it 'does not update the answer in database' do
+        expect { valid_response }.not_to change(answer, :body)
+      end
+    end
+  end
+
   describe 'POST #destroy' do
     let!(:answer) { create(:answer, author: author) }
-    let(:answer_destroy) { delete :destroy, params: { id: answer.id } }
+    let(:answer_destroy) { delete :destroy, params: { id: answer.id }, format: :js }
 
     before { login(author) }
 
@@ -65,10 +115,10 @@ RSpec.describe AnswersController, type: :controller do
         expect { answer_destroy }.to change(author.answers, :count).by(-1)
       end
 
-      it 'redirects to the question_path' do
+      it 'render destroy template' do
         answer_destroy
 
-        expect(response).to redirect_to question_path(answer.question)
+        expect(response).to render_template :destroy
       end
     end
 
@@ -79,10 +129,10 @@ RSpec.describe AnswersController, type: :controller do
         expect { answer_destroy }.not_to change(author.answers, :count)
       end
 
-      it 'redirects to the question_path' do
+      it 'render destroy template' do
         answer_destroy
 
-        expect(response).to redirect_to question_path(answer.question)
+        expect(response).to render_template :destroy
       end
     end
   end

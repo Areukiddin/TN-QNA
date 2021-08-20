@@ -1,3 +1,13 @@
-%p.answer= answer.body
-- if user_signed_in? && current_user.author_of?(answer)
-  %p.delete= link_to 'Delete answer', answer_path(answer), method: :delete, data: { confirm: 'Are you sure to delete answer?' }
+.answer{id: answer.id}
+  %p= answer.body
+  - if user_signed_in? && current_user.author_of?(answer)
+    %p.delete= link_to 'Delete', answer_path(answer), method: :delete, data: { answer_id: answer.id }, remote: true
+    %p.edit= link_to 'Edit', '#', class: 'edit-answer link', data: { answer_id: answer.id }
+
+  = render 'shared/errors', resource: answer
+
+  = form_with model: answer, class: 'hidden', html: {id: "edit-answer-#{answer.id}"}, local: false do |f|
+    = f.label :body, 'Your answer'
+    = f.text_area :body
+
+    = f.submit 'Save'

@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: %i[show]
   before_action :find_question, only: %i[create]
-  before_action :find_answer, only: %i[show destroy]
+  before_action :find_answer, only: %i[show update destroy]
 
   def show; end
 
@@ -9,15 +9,15 @@ class AnswersController < ApplicationController
     @answer = @question.answers.create(answer_params.merge(author: current_user))
   end
 
-  def destroy
-    if current_user.author_of?(@answer)
-      @answer.destroy
-      flash[:notice] = t('user_actions.successfully_deleted', resource: @answer.class)
-    else
-      flash[:notice] = t('user_actions.delete_rejected', resource: @answer.class.to_s.downcase)
-    end
+  def update
+    @answer.update(answer_params)
+    @question = @answer.question
+  end
 
-    redirect_to question_path(@answer.question)
+  def destroy
+    return unless current_user.author_of?(@answer)
+
+    @answer.destroy
   end
 
   private
