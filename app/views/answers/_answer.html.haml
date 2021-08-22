@@ -1,4 +1,4 @@
-%li.answer{id: answer.id}
+%li{id: answer.id, class: answer.best ? 'answer best' : 'answer'}
   %p= answer.body
   - if user_signed_in? && current_user.author_of?(answer.question) && !answer.best
     %p.best= button_to 'Best', set_best_answer_path(answer), remote: true, method: :patch

@@ -1,4 +1,5 @@
 .answer {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -20,4 +21,14 @@
   & > p {
     padding-right: 10px;
   }
+}
+
+.answer.best:before {
+  content: "";
+  background-image: url("./icons/star.png");
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  top: 4px;
+  left: -30px;
 }
