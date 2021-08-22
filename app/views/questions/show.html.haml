@@ -4,7 +4,7 @@
   %p.delete= link_to 'Delete', question_path(@question), method: :delete, data: { confirm: 'Are you sure to delete question?' }
 
 %h4= "Answers:"
-.answers
+%ul.answers
   = render @question.answers
 
 .answer-errors

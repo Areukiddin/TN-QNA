@@ -106,7 +106,7 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'POST #destroy' do
     let!(:answer) { create(:answer, author: author) }
-    let(:answer_destroy) { delete :destroy, params: { id: answer.id }, format: :js }
+    let(:answer_destroy) { delete :destroy, params: { id: answer }, format: :js }
 
     before { login(author) }
 
@@ -133,6 +133,53 @@ RSpec.describe AnswersController, type: :controller do
         answer_destroy
 
         expect(response).to render_template :destroy
+      end
+    end
+  end
+
+  describe 'PATCH #set_best' do
+    let(:user) { create(:user) }
+    let(:author) { create(:user) }
+    let(:question) { create(:question, author: author) }
+    let(:answer) { create(:answer, author: author, question: question) }
+
+    let(:valid_response) { patch :set_best, params: { id: answer }, format: :js }
+
+    context 'when author setting the best answer' do
+      before do
+        login author
+        valid_response
+      end
+
+      it 'set as best answer' do
+        answer.reload
+        expect(answer).to be_best
+      end
+
+      it 're-render set_best template' do
+        expect(response).to render_template :set_best
+      end
+    end
+
+    context 'when another user trying to set the best answer' do
+      before do
+        login user
+        valid_response
+      end
+
+      it 'does not set as best answer' do
+        answer.reload
+        expect(answer).not_to be_best
+      end
+
+      it 're-render set_best template' do
+        expect(response).to render_template :set_best
+      end
+    end
+
+    context 'when unauthorized user trying to set the best answer' do
+      it 'does not set as best answer' do
+        expect { valid_response }.not_to change(answer, :best)
       end
     end
   end

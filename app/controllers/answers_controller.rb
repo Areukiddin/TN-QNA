@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: %i[show]
   before_action :find_question, only: %i[create]
-  before_action :find_answer, only: %i[show update destroy]
+  before_action :find_answer, only: %i[show update destroy set_best]
 
   def show; end
 
@@ -18,6 +18,12 @@ class AnswersController < ApplicationController
     return unless current_user.author_of?(@answer)
 
     @answer.destroy
+  end
+
+  def set_best
+    return unless current_user.author_of?(@answer.question)
+
+    @answer.assign_as_best
   end
 
   private
