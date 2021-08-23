@@ -67,9 +67,7 @@ RSpec.describe AnswersController, type: :controller do
         before { valid_response }
 
         it 'changes answer attributes' do
-          answer.reload
-
-          expect(answer.body).to eq 'updated body'
+          expect(answer.reload.body).to eq 'updated body'
         end
 
         it 'renders update view' do
@@ -106,11 +104,12 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'POST #destroy' do
     let!(:answer) { create(:answer, author: author) }
-    let(:answer_destroy) { delete :destroy, params: { id: answer }, format: :js }
 
     before { login(author) }
 
     context 'when author tries to destroy own answer' do
+      let(:answer_destroy) { delete :destroy, params: { id: answer }, format: :js }
+
       it 'deletes the answer from database' do
         expect { answer_destroy }.to change(author.answers, :count).by(-1)
       end
@@ -125,35 +124,35 @@ RSpec.describe AnswersController, type: :controller do
     context 'when another user tries to destroy the answer' do
       before { login(user) }
 
+      let(:answer_destroy_no_js) { delete :destroy, params: { id: answer } }
+
       it 'not deletes the answer from database' do
-        expect { answer_destroy }.not_to change(author.answers, :count)
+        expect { answer_destroy_no_js }.not_to change(author.answers, :count)
       end
 
-      it 'render destroy template' do
-        answer_destroy
+      it 'return forbidden status' do
+        answer_destroy_no_js
 
-        expect(response).to render_template :destroy
+        expect(response).to have_http_status :forbidden
       end
     end
   end
 
   describe 'PATCH #set_best' do
-    let(:user) { create(:user) }
-    let(:author) { create(:user) }
     let(:question) { create(:question, author: author) }
-    let(:answer) { create(:answer, author: author, question: question) }
-
-    let(:valid_response) { patch :set_best, params: { id: answer }, format: :js }
+    let!(:answer) { create(:answer, author: author, question: question) }
 
     context 'when author setting the best answer' do
+      let(:author) { create(:user) }
+      let(:valid_response) { patch :set_best, params: { id: answer }, format: :js }
+
       before do
         login author
         valid_response
       end
 
       it 'set as best answer' do
-        answer.reload
-        expect(answer).to be_best
+        expect(answer.reload).to be_best
       end
 
       it 're-render set_best template' do
@@ -162,24 +161,28 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'when another user trying to set the best answer' do
+      let(:user) { create(:user) }
+      let(:valid_response_no_js) { patch :set_best, params: { id: answer } }
+
       before do
         login user
-        valid_response
+        valid_response_no_js
       end
 
       it 'does not set as best answer' do
-        answer.reload
-        expect(answer).not_to be_best
+        expect(answer.reload).not_to be_best
       end
 
-      it 're-render set_best template' do
-        expect(response).to render_template :set_best
+      it 'return forbidden status' do
+        expect(response).to have_http_status :forbidden
       end
     end
 
     context 'when unauthorized user trying to set the best answer' do
+      let(:valid_response_no_js) { patch :set_best, params: { id: answer } }
+
       it 'does not set as best answer' do
-        expect { valid_response }.not_to change(answer, :best)
+        expect { valid_response_no_js }.not_to change(answer, :best)
       end
     end
   end

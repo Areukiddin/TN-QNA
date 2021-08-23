@@ -15,15 +15,19 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    return unless current_user.author_of?(@answer)
-
-    @answer.destroy
+    if current_user.author_of?(@answer)
+      @answer.destroy
+    else
+      head :forbidden
+    end
   end
 
   def set_best
-    return unless current_user.author_of?(@answer.question)
-
-    @answer.assign_as_best
+    if current_user.author_of?(@answer.question)
+      @answer.assign_as_best
+    else
+      head :forbidden
+    end
   end
 
   private
