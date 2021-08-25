@@ -1,8 +1,8 @@
-%header.header
-  %p.menu
-    - if user_signed_in?
-      %span.logout
+%div.header
+  %p.header-title QNA
+  - if user_signed_in?
+    %span.logout
       = link_to 'Logout', destroy_user_session_path, method: :delete
-    - else
-      %span.login
+  - else
+    %span.login
       = link_to 'Login', new_user_session_path
