@@ -7,7 +7,7 @@ class Answer < ApplicationRecord
   def assign_as_best
     transaction do
       question.answers.update_all(best: false)
-      update(best: true)
+      update!(best: true)
     end
   end
 end
