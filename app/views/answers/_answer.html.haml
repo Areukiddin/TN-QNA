@@ -1,7 +1,13 @@
 %li{id: answer.id, class: answer.best ? 'answer best' : 'answer'}
   %p= answer.body
+
+  -if answer.files.attached?
+    - answer.files.each do |file|
+      %p.file= link_to file.filename.to_s, url_for(file)
+
   - if user_signed_in? && current_user.author_of?(answer.question) && !answer.best
-    %p.best= button_to 'Best', set_best_answer_path(answer), remote: true, method: :patch
+    = button_to 'Best', set_best_answer_path(answer), remote: true, method: :patch
+
   - if user_signed_in? && current_user.author_of?(answer)
     %div.buttons-row
       %p.delete= link_to 'Delete', answer_path(answer), method: :delete, data: { answer_id: answer.id }, remote: true
@@ -10,7 +16,9 @@
   = render 'shared/errors', resource: answer
 
   = form_with model: answer, class: 'hidden', html: {id: "edit-answer-#{answer.id}"}, local: false do |f|
-    = f.label :body, 'Your answer'
-    = f.text_area :body
+
+    %p.form-field
+      = f.label :body, 'Your answer'
+      = f.text_area :body
 
     = f.submit 'Save'

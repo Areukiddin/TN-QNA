@@ -22,6 +22,17 @@ feature 'User can create answer', %(
       expect(page).to have_content 'Question answer'
     end
 
+    scenario 'answer a question with attached files' do
+      fill_in 'Your answer', with: 'Question answer'
+
+      attach_file 'File', [Rails.root.join('spec/rails_helper.rb'), Rails.root.join('spec/spec_helper.rb')]
+
+      click_on 'Answer'
+
+      expect(page).to have_link 'rails_helper.rb'
+      expect(page).to have_link 'spec_helper.rb'
+    end
+
     scenario 'try to post empty answer' do
       click_on 'Answer'
 
