@@ -23,3 +23,21 @@
   width: min-content;
   margin-bottom: 10px;
 }
+
+.file-container {
+  display: flex;
+  align-items: baseline;
+
+  & > p:first-of-type {
+    margin-right: 10px;
+  }
+}
+
+.attach {
+  padding: 5px;
+  cursor: pointer;
+}
+
+.delete-attach {
+  cursor: pointer;
+}
