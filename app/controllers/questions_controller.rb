@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
-  before_action :set_question, only: %i[show update destroy]
+  before_action :set_question, only: %i[show update destroy add_attachment delete_attachment]
 
   def index
     @questions = Question.all
@@ -37,6 +37,15 @@ class QuestionsController < ApplicationController
     end
 
     redirect_to questions_path
+  end
+
+  def add_attachment
+    @question.files.attach(params.require(:question).require(:files))
+  end
+
+  def delete_attachment
+    @file = @question.files.find(params[:file_id])
+    @file.purge
   end
 
   private

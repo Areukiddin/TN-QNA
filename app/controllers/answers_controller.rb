@@ -1,9 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: %i[show]
   before_action :find_question, only: %i[create]
-  before_action :find_answer, only: %i[show update destroy set_best]
-
-  def show; end
+  before_action :find_answer, only: %i[update destroy set_best add_attachment delete_attachment]
 
   def create
     @answer = @question.answers.create(answer_params.merge(author: current_user))
@@ -28,6 +26,16 @@ class AnswersController < ApplicationController
     else
       head :forbidden
     end
+  end
+
+  def add_attachment
+    @answer.files.attach(params.require(:answer).require(:files))
+  end
+
+  def delete_attachment
+    @file = @answer.files.find(params[:file_id])
+
+    @file.purge
   end
 
   private
