@@ -2,17 +2,17 @@
   %p= answer.body
 
   %h5 Attachments
-  %div.answer-files
-    -if answer.files.attached?
-      =render answer.files
+  %ul.files{id: "files_attached-#{answer.id}"}
+  - if answer.files.attached?
+    = render partial: 'shared/attachment', collection: answer.files
 
   - if user_signed_in? && current_user.author_of?(answer.question) && !answer.best
     = button_to 'Best', set_best_answer_path(answer), remote: true, method: :patch
 
   - if user_signed_in? && current_user.author_of?(answer)
-    = form_with model: answer, url: add_answer_attachment_file_path(answer), class: "attach", local: false do |f|
+    = form_with model: answer, class: "attach", local: false do |f|
       = f.label :files
-      = f.file_field :files, multiple: true
+      = f.file_field :files, multiple: true, direct_upload: true
 
       = f.submit 'Attach'
 

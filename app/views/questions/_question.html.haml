@@ -3,14 +3,14 @@
   %h3= @question.body
 
   %h5 Attachments
-  %div.files
-    -if @question.files.attached?
-      =render @question.files
+  %ul.files{id: "files_attached-#{@question.id}"}
+    - if @question.files.attached?
+      = render partial: 'shared/attachment', collection: @question.files
 
   - if user_signed_in? && current_user.author_of?(@question)
-    = form_with model: @question, url: add_attachment_file_path(@question), class: "attach", local: false do |f|
+    = form_with model: @question, class: "attach", local: false do |f|
       = f.label :files
-      = f.file_field :files, multiple: true
+      = f.file_field :files, multiple: true, direct_upload: true
 
       = f.submit 'Attach'
 
