@@ -2,10 +2,15 @@
   %h2= @question.title
   %h3= @question.body
 
-  %h5 Attachments
+  %h5 Attachments:
   %ul.files{id: "files_attached-#{@question.id}"}
     - if @question.files.attached?
       = render partial: 'shared/attachment', collection: @question.files
+
+  %h5 Links:
+  %ul
+    - @question.links.each do |link|
+      %li= link_to link.name, link.url
 
   - if user_signed_in? && current_user.author_of?(@question)
     = form_with model: @question, class: "attach", local: false do |f|
