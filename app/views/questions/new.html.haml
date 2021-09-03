@@ -1,6 +1,7 @@
 = render 'shared/errors', resource: @question
+
 .form
-  = form_with model: @question, local: false do |f|
+  = form_with model: @question, local: true do |f|
 
     %p.form-field
       = f.label :title
@@ -18,8 +19,6 @@
         = render 'link_fields', f: link
       .links
         = link_to_add_association 'add link', f, :links
-    = f.submit
-
 
     = f.submit 'Ask'
     %br

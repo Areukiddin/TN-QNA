@@ -30,6 +30,9 @@ gem 'bootstrap'
 gem 'cocoon'
 gem 'jquery-rails'
 
+# URL validation
+gem 'validate_url'
+
 # S3 bucket
 gem 'aws-sdk-s3', require: false
 
