@@ -3,6 +3,8 @@ $('.answer-errors').html('<%= escape_javascript(render 'shared/errors', resource
 <% if @answer.persisted? %>
   $('.answers').append('<%= escape_javascript(render @answer) %>')
   $('.new-answer #answer_body').val('');
-  $('#answer_links_attributes_0_name').val('');
-  $('#answer_links_attributes_0_url').val('');
+
+  $('#links :input').each(function(index) {
+    this.value = "";
+  })
 <% end %>
