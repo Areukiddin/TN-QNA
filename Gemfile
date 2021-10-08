@@ -29,6 +29,7 @@ gem 'devise'
 gem 'bootstrap'
 gem 'cocoon'
 gem 'jquery-rails'
+gem 'octokit', '~> 4.0'
 
 # URL validation
 gem 'validate_url'

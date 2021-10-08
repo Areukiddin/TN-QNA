@@ -1,5 +1,7 @@
 RSpec.describe Question, type: :model do
   it { should belong_to :author }
+
+  it { should have_one(:reward).dependent(:destroy) }
   it { should have_many(:answers).dependent(:destroy) }
   it { should have_many(:links).dependent(:destroy) }
 

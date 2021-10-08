@@ -25,6 +25,7 @@ class AnswersController < ApplicationController
   def set_best
     if current_user.author_of?(@answer.question)
       @answer.assign_as_best
+      helpers.grant_reward(@answer.author)
     else
       head :forbidden
     end
