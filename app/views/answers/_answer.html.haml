@@ -2,9 +2,13 @@
   %p= answer.body
 
   %h5 Attachments
-  %ul.files{id: "files_attached-#{answer.id}"}
+  %ul.files{ id: "files_attached-#{answer.id}" }
   - if answer.files.attached?
     = render partial: 'shared/attachment', collection: answer.files
+
+  %h5 Links:
+  %ul.links
+    = render answer.links
 
   - if user_signed_in? && current_user.author_of?(answer.question) && !answer.best
     = button_to 'Best', set_best_answer_path(answer), remote: true, method: :patch

@@ -1,5 +1,7 @@
-%div.header
+.header
   %p.header-title QNA
+  %span.white
+    = link_to 'Rewards', rewards_path
   - if user_signed_in?
     %span.logout
       = link_to 'Logout', destroy_user_session_path, method: :delete

@@ -7,6 +7,8 @@ class User < ApplicationRecord
          :rememberable,
          :validatable
 
+  has_many :rewards, dependent: :destroy
+
   has_many :answers, class_name: 'Answer', foreign_key: :author_id, inverse_of: :author, dependent: :destroy
   has_many :questions, class_name: 'Question', foreign_key: :author_id, inverse_of: :author, dependent: :destroy
 
