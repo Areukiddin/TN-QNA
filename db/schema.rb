@@ -75,7 +75,6 @@ ActiveRecord::Schema.define(version: 2021_09_11_095556) do
 
   create_table "rewards", force: :cascade do |t|
     t.text "title", null: false
-    t.string "image", null: false
     t.bigint "user_id"
     t.bigint "question_id", null: false
     t.datetime "created_at", precision: 6, null: false

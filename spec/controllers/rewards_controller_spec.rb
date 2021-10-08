@@ -1,10 +1,15 @@
 RSpec.describe RewardsController, type: :controller do
+  describe 'GET #index' do
+    let(:user) { create(:user) }
+    let(:reward) { create(:reward, user: user) }
 
-  describe "GET #index" do
-    it "returns http success" do
+    before do
+      login(user)
       get :index
-      expect(response).to have_http_status(:success)
+    end
+
+    it 'assigns a new reward to @rewards' do
+      expect(assigns(:rewards)).to match_array(user.rewards)
     end
   end
-
 end
