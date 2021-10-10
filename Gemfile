@@ -30,6 +30,7 @@ gem 'bootstrap'
 gem 'cocoon'
 gem 'jquery-rails'
 gem 'octokit', '~> 4.0'
+gem 'with_model'
 
 # URL validation
 gem 'validate_url'
