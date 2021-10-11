@@ -27,6 +27,8 @@ feature 'User can add links to question', %(
 
       click_on 'Ask'
 
+      visit current_path
+
       expect(page).to have_content 'test'
       expect(page).to have_content 'gistfile1.txt'
       expect(page).to have_content 'test'
