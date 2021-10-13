@@ -30,4 +30,17 @@ Rails.application.routes.draw do
   resources :rewards, only: %i[index]
 
   resources :links, only: %i[destroy]
+
+  namespace :api do
+    namespace :v1 do
+      resources :profiles, only: %i[] do
+        get :me, on: :collection
+        get :all, on: :collection
+      end
+
+      resources :questions, only: %i[index create show destroy update] do
+        resources :answers, shallow: true, only: %i[create show destroy update]
+      end
+    end
+  end
 end
