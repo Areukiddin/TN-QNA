@@ -25,6 +25,9 @@ gem 'jbuilder', '~> 2.7'
 # Auth
 gem 'devise'
 
+# Role based access
+gem 'cancancan'
+
 # UI
 gem 'bootstrap'
 gem 'cocoon'
