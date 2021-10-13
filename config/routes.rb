@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  use_doorkeeper
   get 'rewards/index'
   devise_for :users
   root to: 'questions#index'
