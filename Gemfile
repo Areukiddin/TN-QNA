@@ -22,6 +22,11 @@ gem 'jbuilder', '~> 2.7'
 # Use Active Model has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
+# Jobs
+gem 'sidekiq'
+gem 'sinatra', require: false
+gem 'whenever', require: false
+
 # Auth
 gem 'devise'
 
