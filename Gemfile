@@ -28,6 +28,10 @@ gem 'devise'
 # Role based access
 gem 'cancancan'
 
+# REST
+gem 'active_model_serializers', '~> 0.10'
+gem 'doorkeeper'
+
 # UI
 gem 'bootstrap'
 gem 'cocoon'
